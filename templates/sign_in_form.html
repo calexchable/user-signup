@@ -2,6 +2,14 @@
 <html>
     <head>
         <style>
+            form {
+                background-color: lightseagreen;
+                padding: 20px;
+                margin: 0 auto;
+                width: 350px;
+                font: 16px sans-serif;
+                border-radious: 10px;
+            }
             .error { color: red; }
         </style>
     </head>
@@ -10,13 +18,13 @@
         <form method="POST">
             <label for="username">Username:</label>
             <input name="username" type="text" value="" />
-            <label for="password">Password:</label>
+            <br><label for="password">Password:</label>
             <input name="password" type="password" value="" />
-            <label for="verify">Verify Password:</label>
+            <br><label for="verify">Verify Password:</label>
             <input for="verify" type="password" value="" />
-            <label for="email">Email (optional):</label>
+            <br><label for="email">Email (optional):</label>
             <input for="email" type="text" value="" />
-            <input type="submit" value="Submit" />
+            <br><input type="submit" value="Submit" />
         </form>
     </body>
 </html>
