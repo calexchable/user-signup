@@ -54,7 +54,11 @@ def sign_in():
         verify = ""
     
     # Validate Email #
-    # ???? #
+    arroba = email.count("@")
+    punto = email.count(".")
+
+    if arroba != 1 or punto != 1:
+        email_error = "Please add a valid email address."
 
     if not username_error and not password_error and not verify_error and not email_error:
         username = username
@@ -63,6 +67,8 @@ def sign_in():
         username = username,
         username_error = username_error,
         password_error = password_error,
+        verify = verify,
+        verify_error = verify_error,
         email = email,
         email_error = email_error
         )
