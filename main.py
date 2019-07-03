@@ -5,35 +5,32 @@ import os
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
     return render_template("sign_in_form.html")
 
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["GET", "POST"])
+def validation():
 
-def sign_in():
+    # Validate User Name #
     username = request.form["username"]
-    password = request.form["password"]
-    verify = request.form["verify"]
-    email = request.form["email"]
-
     username_error = ""
-    password_error = ""
-    verify_error = ""
-    email_error = ""
 
-    # User name validation #
     if username == "":
         username_error = "Please enter a username."
 
     elif len(username) < 3 or len(username) > 20:
         username_error = "Username must contain between 3 and 20 characters."
         username = ""
-    
+        
     elif " " in username:
         username_error = "Username cannot contain any spaces."
+        username = ""
 
-    # Validate password #
+    # Validate Password #
+    password = request.form["password"]
+    password_error = ""
+
     if password == "":
         password_error = "Please enter a valid password."
     
@@ -44,26 +41,36 @@ def sign_in():
     elif " " in password:
         password_error = "Password must not contain spaces."
         password = ""
-    
-    # Password verification #
+
+    # Verify Password #
+    verify = request.form["verify"]
+    verify_error = ""
+
     if verify == "":
         verify_error = "Please validate your password."
     
     elif verify != password:
         verify_error = "Passwords do not mach. Please re-enter password."
         verify = ""
-    
-    # Validate Email #
-    arroba = email.count("@")
-    punto = email.count(".")
 
-    if arroba != 1 or punto != 1:
-        email_error = "Please add a valid email address."
+    # Validate Email #
+    email = request.form["email"]
+    email_error = ""
+
+    if email != "":
+        arroba = email.count("@")
+        punto = email.count(".")
+
+        if arroba != 1 or punto != 1:
+            email_error = "Please add a valid email address."
+
+    # SUCCESS OR FAILURE #
 
     if not username_error and not password_error and not verify_error and not email_error:
         username = username
-        return render_template("welcome.html", username = username)
-    else: return render_template("sign_in_form.html",
+        return redirect("/welcome?username={0}".format(username))
+    else:
+        return render_template("sign_in_form.html",
         username = username,
         username_error = username_error,
         password_error = password_error,
@@ -72,5 +79,11 @@ def sign_in():
         email = email,
         email_error = email_error
         )
+
+@app.route("/welcome")
+def welcome():
+    username = request.args.get("username")
+    return render_template("welcome.html", username = username)
+
 
 app.run()
